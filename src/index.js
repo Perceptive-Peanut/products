@@ -5,9 +5,6 @@ const sequelize = require('./db/sequelize');
 
 // models
 const Product = require('./models/product');
-const Style = require('./models/style');
-const Photo = require('./models/photo');
-const Sku = require('./models/sku');
 
 // force db update
 sequelize.sync({force: true});
