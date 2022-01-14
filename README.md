@@ -6,14 +6,14 @@ From the product root directory run:
 psql postgres  < sql/product.pg.sql
 ```
 
-## Add seed data to database
+## Extract, transform, and load data
 ```bash
-psql postgres  < sql/seed.sql
+psql postgres  < sql/etl.sql
 ```
 
-## Create DB, Add seed & clean data
+## Create DB, extract, transform, and load data
 ```bash
-psql postgres  < sql/product.pg.sql && psql postgres  < sql/seed.sql && psql postgres  < sql/update_constrains.sql
+psql postgres  < sql/product.pg.sql && psql postgres  < sql/etl.sql
 ```
 
 ## Get CSV columns
