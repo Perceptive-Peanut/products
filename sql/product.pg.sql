@@ -21,8 +21,8 @@ DROP TABLE IF EXISTS productsschema.skus CASCADE;
 
 -- -----------------------------------------------------
 -- Table productsDB.products
--- -----------------------------------------------------
 -- id,name,slogan,description,category,default_price
+-- -----------------------------------------------------
 CREATE TABLE productsschema.products (
   id SERIAL UNIQUE PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -34,13 +34,13 @@ CREATE TABLE productsschema.products (
 
 -- -----------------------------------------------------
 -- Table styles
--- -----------------------------------------------------
 -- id,productId,name,sale_price,original_price,default_style
+-- -----------------------------------------------------
 CREATE TABLE productsschema.styles (
   id SERIAL PRIMARY KEY,
   productId INT NULL DEFAULT NULL,
   name VARCHAR(255) NOT NULL,
-  sale_price INT,
+  sale_price INT NULL,
   original_price INT NOT NULL,
   default_style INT NOT NULL,
   CONSTRAINT styles_ibfk_1
@@ -50,40 +50,24 @@ CREATE TABLE productsschema.styles (
 
 -- -----------------------------------------------------
 -- Table photos
--- -----------------------------------------------------
 -- id,styleId,url,thumbnail_url
+-- -----------------------------------------------------
 CREATE TABLE productsschema.photos (
   id SERIAL PRIMARY KEY,
   styleId INT NULL DEFAULT NULL,
-  thumbnail_url VARCHAR(255) NOT NULL,
   url TEXT NOT NULL,
+  thumbnail_url TEXT NOT NULL,
   CONSTRAINT photos_fk
     FOREIGN KEY (styleId)
     REFERENCES productsschema.styles(id)
 );
 
 -- -----------------------------------------------------
--- Table product_related
--- -----------------------------------------------------
--- id,current_product_id,related_product_id
-CREATE TABLE productsschema.related (
-  id INT NOT NULL PRIMARY KEY,
-  current_product_id INT NOT NULL,
-  related_product_id INT NOT NULL,
-  CONSTRAINT product_related_ibfk_1
-    FOREIGN KEY (current_product_id)
-    REFERENCES productsschema.products (id),
-  CONSTRAINT product_related_ibfk_2
-    FOREIGN KEY (related_product_id)
-    REFERENCES productsschema.products (id)
-);
-
--- -----------------------------------------------------
 -- Table skus
--- -----------------------------------------------------
 -- id,styleId,size,quantity
+-- -----------------------------------------------------
 CREATE TABLE productsschema.skus (
-  id SERIAL PRIMARY KEY ,
+  id SERIAL PRIMARY KEY,
   styleId INT NULL DEFAULT NULL,
   size VARCHAR(255) NOT NULL,
   quantity INT NOT NULL,
@@ -91,6 +75,20 @@ CREATE TABLE productsschema.skus (
     FOREIGN KEY (styleId)
     REFERENCES productsschema.styles (id)
 );
+
+-- -----------------------------------------------------
+-- Table product_related
+-- id,current_product_id,related_product_id
+-- -----------------------------------------------------
+CREATE TABLE productsschema.related (
+  id INT NOT NULL PRIMARY KEY,
+  current_product_id INT NOT NULL,
+  related_product_id INT NOT NULL,
+  CONSTRAINT product_related_ibfk_1
+    FOREIGN KEY (current_product_id)
+    REFERENCES productsschema.products (id)
+);
+
 
 -- -----------------------------------------------------
 -- Populate db schema tables
