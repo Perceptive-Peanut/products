@@ -11,9 +11,9 @@ psql postgres  < sql/product.pg.sql
 psql postgres  < sql/seed.sql
 ```
 
-## Create DB & Add seed
+## Create DB, Add seed & clean data
 ```bash
-psql postgres  < sql/product.pg.sql && psql postgres  < sql/seed.sql
+psql postgres  < sql/product.pg.sql && psql postgres  < sql/seed.sql && psql postgres  < sql/update_constrains.sql
 ```
 
 ## Get CSV columns
