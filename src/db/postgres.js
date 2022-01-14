@@ -2,8 +2,6 @@ const { Client } = require('pg');
 
 const { PGUSER, PGPASSWORD, PGHOST, PGPORT, PGDATABASE } = process.env;
 
-console.log('PGDATABASE', PGDATABASE)
-
 const db = new Client({
   host: PGHOST,
   port: PGPORT,
