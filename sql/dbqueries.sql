@@ -1,8 +1,8 @@
-SELECT * FROM productsdb.products;
-SELECT * FROM productsdb.photos;
-SELECT * FROM productsdb.styles;
-SELECT * FROM productsdb.skus;
-SELECT * FROM productsdb.product_related;
+SELECT * FROM productsdb.products WHERE id < 10;
+-- SELECT * FROM productsdb.photos WHERE id < 10;
+-- SELECT * FROM productsdb.styles WHERE id < 10;
+-- SELECT * FROM productsdb.skus WHERE id < 10;
+-- SELECT * FROM productsdb.product_related WHERE id < 10;
 
 
 /* get /products */

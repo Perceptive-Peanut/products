@@ -16,6 +16,11 @@ psql postgres  < sql/etl.sql
 psql postgres  < sql/product.pg.sql && psql postgres  < sql/etl.sql
 ```
 
+## Run queries
+```
+psql postgres < sql/dbqueries.sql
+```
+
 ## Get CSV columns
 ```bash
 head -1 csv/product.csv # id,name,slogan,description,category,default_price
