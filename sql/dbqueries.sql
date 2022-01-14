@@ -1,4 +1,6 @@
-SELECT * FROM productsdb.products WHERE id < 10;
+\connect productsdb;
+SELECT * FROM productsschema.products WHERE id < 10;
+-- SELECT * FROM productsdb.productsschema.products WHERE id < 10;
 -- SELECT * FROM productsdb.photos WHERE id < 10;
 -- SELECT * FROM productsdb.styles WHERE id < 10;
 -- SELECT * FROM productsdb.skus WHERE id < 10;
