@@ -32,6 +32,9 @@ CREATE TABLE productsschema.products (
   default_price INT NOT NULL
 );
 
+-- CREATE INDEX idx_name
+-- ON productsschema.products;
+
 -- -----------------------------------------------------
 -- Table styles
 -- id,productId,name,sale_price,original_price,default_style
@@ -62,6 +65,9 @@ CREATE TABLE productsschema.photos (
     REFERENCES productsschema.styles(id)
 );
 
+CREATE INDEX photos_styleId_idx
+ON productsschema.photos (styleId);
+
 -- -----------------------------------------------------
 -- Table skus
 -- id,styleId,size,quantity
@@ -75,6 +81,9 @@ CREATE TABLE productsschema.skus (
     FOREIGN KEY (styleId)
     REFERENCES productsschema.styles (id)
 );
+
+CREATE INDEX skus_styleId_idx
+ON productsschema.skus (styleId);
 
 -- -----------------------------------------------------
 -- Table product_related

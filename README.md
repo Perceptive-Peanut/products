@@ -30,3 +30,35 @@ head -1 csv/skus.csv # id,styleId,size,quantity
 head -1 csv/styles.csv # id,productId,name,sale_price,original_price,default_style
 ```
 
+## Generate queries times reports
+```bash
+psql postgres  < sql/queriestimes.sql  > sql/queriestimes.log
+```
+
+# K6 Install with Homebrew by running:
+```
+brew install k6
+```
+## run the saved script by executing
+```
+k6 run k6tests/stress.js
+```
+## load test with more than 1 virtual user and a slightly longer duration:
+```
+k6 run --vus 10 --duration 5s k6tests/stress.js
+```
+
+# Install frisby
+```
+npm install frisby --save-dev
+```
+
+# Install Jest
+```
+npm install --save-dev jest
+```
+
+## Run your tests from the CLI
+```
+jest
+```

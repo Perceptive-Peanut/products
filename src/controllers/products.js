@@ -1,7 +1,11 @@
 const Product = require('../models/product');
 
 const handleGetAllProducts = (req, res) => {
-  Product.getAllProducts(null, (err, response) => {
+  // route/:param1/:param2
+  const params = req.params;
+  // route/?query
+  const queryParams = req.query;
+  Product.getAllProducts(queryParams, (err, response) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -10,7 +14,8 @@ const handleGetAllProducts = (req, res) => {
 };
 
 const handleGetProductById = (req, res) => {
-  Product.getProductById(null, (err, response) => {
+  const {product_id} = req.params;
+  Product.getProductById(product_id, (err, response) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -19,7 +24,8 @@ const handleGetProductById = (req, res) => {
 };
 
 const handleGetStylesByProductId = (req, res) => {
-  Product.getStylesByProductId(null, (err, response) => {
+  const {product_id} = req.params;
+  Product.getStylesByProductId(product_id, (err, response) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -28,7 +34,7 @@ const handleGetStylesByProductId = (req, res) => {
 };
 
 const handleGetRelatedByProductId = (req, res) => {
-  Product.getRelatedByProductId(null, (err, response) => {
+  Product.getRelatedByProductId(params, (err, response) => {
     if (err) {
       res.status(500).send(err);
     }

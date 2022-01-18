@@ -1,0 +1,43 @@
+You are now connected to database "productsdb" as user "nanda".
+                                                     QUERY PLAN                                                      
+---------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.24..0.49 rows=5 width=277) (actual time=0.017..0.020 rows=5 loops=1)
+   ->  Seq Scan on products  (cost=0.00..48646.53 rows=1000053 width=277) (actual time=0.014..0.016 rows=10 loops=1)
+ Planning Time: 0.543 ms
+ Execution Time: 0.059 ms
+(4 rows)
+
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Seq Scan on products  (cost=0.00..48646.53 rows=1000053 width=277) (actual time=0.005..232.647 rows=1000011 loops=1)
+   Filter: (id IS NOT NULL)
+ Planning Time: 0.100 ms
+ Execution Time: 295.112 ms
+(4 rows)
+
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=24159.12..24159.13 rows=1 width=32) (actual time=104.092..105.865 rows=1 loops=1)
+   ->  Gather  (cost=1000.00..24106.75 rows=3 width=18) (actual time=103.447..105.222 rows=6 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         ->  Parallel Seq Scan on styles s  (cost=0.00..23106.45 rows=1 width=18) (actual time=96.059..99.809 rows=2 loops=3)
+               Filter: (productid = 1)
+               Rows Removed by Filter: 652699
+   SubPlan 1
+     ->  Aggregate  (cost=8.73..8.74 rows=1 width=32) (actual time=0.064..0.065 rows=1 loops=6)
+           ->  Index Scan using photos_styleid_idx on photos  (cost=0.43..8.70 rows=15 width=255) (actual time=0.015..0.023 rows=6 loops=6)
+                 Index Cond: (styleid = s.id)
+   SubPlan 2
+     ->  Aggregate  (cost=8.70..8.71 rows=1 width=32) (actual time=0.022..0.023 rows=1 loops=6)
+           ->  Index Scan using skus_styleid_idx on skus  (cost=0.43..8.66 rows=13 width=7) (actual time=0.008..0.011 rows=6 loops=6)
+                 Index Cond: (styleid = s.id)
+ Planning Time: 0.736 ms
+ Execution Time: 105.975 ms
+(17 rows)
+
+                            QUERY PLAN                            
+------------------------------------------------------------------
+ Seq Scan on related  (cost=0.00..69451.05 rows=4508205 width=12)
+(1 row)
+
