@@ -1,20 +1,17 @@
 \connect productsdb;
 
 /* get /products */
-
 -- id,name,slogan,description,category,default_price
-
 SELECT * FROM productsschema.products
   OFFSET 5 -- how many records to skip
   FETCH NEXT 5 ROWS ONLY; -- how many records to show
 
-/* get /products/:id */
 
+/* get /products/:id */
 SELECT * FROM productsschema.products WHERE id = id;
 
 
 /* get /products/:id/styles */
-
 SELECT * FROM productsschema.styles AS styles
 	JOIN productsschema.photos AS photos ON styles.id = photos.styleid
 	JOIN productsschema.skus AS skus ON styles.id = skus.styleid
@@ -22,10 +19,7 @@ SELECT * FROM productsschema.styles AS styles
 
 
 /* get /products/:id/related */
-
-SELECT * FROM productsschema.related;
-
-
+SELECT related_product_id FROM productsschema.related WHERE current_product_id = 1;
 
 
 
@@ -34,10 +28,6 @@ SELECT * FROM productsschema.related;
 -- SELECT * FROM productsdb.styles WHERE id < 10;
 -- SELECT * FROM productsdb.skus WHERE id < 10;
 -- SELECT * FROM productsdb.product_related WHERE id < 10;
-
-
-
-
 
 
 /*

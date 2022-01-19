@@ -1,7 +1,6 @@
 -- -----------------------------------------------------
 -- Drop and Create database and schema
 -- -----------------------------------------------------
-
 DROP DATABASE IF EXISTS productsdb;
 CREATE DATABASE productsdb;
 \connect productsdb;
@@ -11,13 +10,11 @@ CREATE SCHEMA productsschema;
 -- -----------------------------------------------------
 -- Drop tables
 -- -----------------------------------------------------
-
 DROP TABLE IF EXISTS productsschema.products CASCADE;
 DROP TABLE IF EXISTS productsschema.photos CASCADE;
 DROP TABLE IF EXISTS productsschema.product_related CASCADE;
 DROP TABLE IF EXISTS productsschema.styles CASCADE;
 DROP TABLE IF EXISTS productsschema.skus CASCADE;
-
 
 -- -----------------------------------------------------
 -- Table productsDB.products
@@ -31,9 +28,6 @@ CREATE TABLE productsschema.products (
   category VARCHAR(255) NOT NULL,
   default_price INT NOT NULL
 );
-
--- CREATE INDEX idx_name
--- ON productsschema.products;
 
 -- -----------------------------------------------------
 -- Table styles
@@ -98,7 +92,6 @@ CREATE TABLE productsschema.related (
     REFERENCES productsschema.products (id)
 );
 
+CREATE INDEX related_current_product_id_idx
+ON productsschema.related (current_product_id);
 
--- -----------------------------------------------------
--- Populate db schema tables
--- -----------------------------------------------------

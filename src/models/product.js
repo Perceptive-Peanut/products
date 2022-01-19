@@ -1,7 +1,6 @@
 const db = require('../db/postgres');
 
 const getAllProducts = (params, callback) => {
-
   const page = params.page || 1;
   const count = params.count || 5;
   const offset = (page - 1) * count;
@@ -27,8 +26,6 @@ const getProductById = (product_id, callback) => {
 }
 
 const getStylesByProductId = (product_id, callback) => {
-  // const queryStr = `SELECT * FROM productsschema.styles where productid = ${product_id};`;
-
   const queryStr = `SELECT json_agg(row_to_json(styles)) FROM (
     SELECT
       s.id,
@@ -53,25 +50,17 @@ const getStylesByProductId = (product_id, callback) => {
     if (err) {
       callback(err);
     }
-    // const response = {
-    //   product_id: product_id,
-    //   results: res.rows.map(row => ({
-    //     ...row,
-    //     photos: [],
-    //     sku: [],
-    //   }))
-    // }
-    callback(null, res.rows);
+    callback(null, res.rows[0].json_agg[0]);
   })
 }
 
-const getRelatedByProductId = (params, callback) => {
-  const queryStr = 'SELECT * FROM productsschema.products WHERE id < 10';
+const getRelatedByProductId = (product_id, callback) => {
+  const queryStr = `SELECT json_agg(related_product_id) FROM productsschema.related WHERE current_product_id = ${product_id};`;
   db.query(queryStr, (err, res) => {
     if (err) {
       callback(err);
     }
-    callback(null, res);
+    callback(null, res.rows[0].json_agg);
   })
 }
 

@@ -3,7 +3,6 @@ const app = express();
 require('dotenv').config();
 const products = require('./routes/products');
 
-
 // middlewares
 app.use(express.json());
 

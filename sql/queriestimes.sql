@@ -31,4 +31,4 @@ EXPLAIN ANALYZE SELECT json_agg(row_to_json(styles)) FROM (
 ) as styles;
 
 /* get /products/:id/related */
-EXPLAIN SELECT * FROM productsschema.related;
+EXPLAIN ANALYZE SELECT related_product_id FROM productsschema.related WHERE current_product_id = 1;

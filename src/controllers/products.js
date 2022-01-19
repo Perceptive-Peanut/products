@@ -34,7 +34,8 @@ const handleGetStylesByProductId = (req, res) => {
 };
 
 const handleGetRelatedByProductId = (req, res) => {
-  Product.getRelatedByProductId(params, (err, response) => {
+  const {product_id} = req.params;
+  Product.getRelatedByProductId(product_id, (err, response) => {
     if (err) {
       res.status(500).send(err);
     }

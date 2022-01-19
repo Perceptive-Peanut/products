@@ -17,5 +17,5 @@ it('/products/:id/styles', function () {
 
 it('/products/:id/related', function () {
   return frisby.get('http://localhost:3000/products/1/related')
-    .expect('status', 500);
+    .expect('status', 200);
 });
