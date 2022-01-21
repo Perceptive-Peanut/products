@@ -83,8 +83,9 @@ ON productsschema.skus (styleId);
 -- Table product_related
 -- id,current_product_id,related_product_id
 -- -----------------------------------------------------
+DROP table IF EXISTS productsschema.related;
 CREATE TABLE productsschema.related (
-  id INT NOT NULL PRIMARY KEY,
+  id INT NOT NULL,
   current_product_id INT NOT NULL,
   related_product_id INT NOT NULL,
   CONSTRAINT product_related_ibfk_1
@@ -94,4 +95,3 @@ CREATE TABLE productsschema.related (
 
 CREATE INDEX related_current_product_id_idx
 ON productsschema.related (current_product_id);
-

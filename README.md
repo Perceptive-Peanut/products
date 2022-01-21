@@ -217,7 +217,11 @@ sudo apt-key add nginx_signing.key
 ```
 cd /etc/apt
 ```
-- Edit the sources.list file, appending this text at the end:
+- Edit the sources.list file:
+```
+sudo vim sources.list
+```
+appending this text at the end of sources.list:
 ```
 deb http://nginx.org/packages/ubuntu focal nginx
 deb-src http://nginx.org/packages/ubuntu focal nginx
@@ -238,6 +242,31 @@ sudo systemctl start nginx.service
 ```
 sudo systemctl status nginx.service
 ```
+- setup nginx
+```
+sudo vim /etc/nginx/nginx.conf
+```
+
+// nginx.conf content should be
+```
+events { }
+http {
+ server {
+    listen         80;
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+    }
+ }
+}
+```
+
+# setup ec2 environment variables
+```
+export SERVER_PORT=3000 PGHOST=52.53.162.110 PGUSER=ubuntu PGPASSWORD=ubuntu PGDATABASE=productsdb PGPORT=5432
+```
+
+
+
 
 7. node
 - download node make sure your version on your local matches the version you get
@@ -280,12 +309,36 @@ scp -i <pemKey> -r ~/Projects/galvanizeNov/perceptive-peanut/products/csv ubuntu
 
 - Add data to database
 ```
-psql postgres  < sql/etl.sql
+psql postgres  < sql/etl.ec2.sql
 ```
 
 10. Run app
 ```
 npm start
+```
+
+11. Run app with pm2
+
+- install pm2
+```
+npm install pm2@latest -g
+```
+
+- start app
+```
+cd products
+pm2 start src/index.js --name sdc-node-api
+```
+
+- set pm2 to restart automatically
+```
+pm2 startup
+```
+
+- save pm2 setup
+
+```
+pm2 save
 ```
 
 
