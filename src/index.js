@@ -5,10 +5,10 @@ const products = require('./routes/products');
 
 // middlewares
 app.use(express.json());
-app.use(express.static(path.join(__dirname, './public')));
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, './public/loaderio-e309a817310c5b846919bd250e24b11c.txt'));
-});
+app.use('/', express.static(path.join(__dirname, './public')));
+// app.get('/', function(req, res) {
+//   res.sendFile(path.join(__dirname, './public/loaderio-e309a817310c5b846919bd250e24b11c.txt'));
+// });
 
 // routes
 app.use('/products', products);
