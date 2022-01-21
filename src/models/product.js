@@ -26,31 +26,38 @@ const getProductById = (product_id, callback) => {
 }
 
 const getStylesByProductId = (product_id, callback) => {
-  const queryStr = `SELECT json_agg(row_to_json(styles)) FROM (
-    SELECT
-      s.id,
-      s.name,
-      s.original_price,
-      s.sale_price,
-      (select json_agg(photos)
+  const queryStr = `SELECT json_build_object(
+    'product_id', 1,
+    'results', (SELECT json_agg(row_to_json(styles)) FROM (
+      SELECT
+        styles.id,
+        styles.name,
+        styles.original_price,
+        styles.sale_price,
+        (select json_agg(photos)
           from (
-          SELECT thumbnail_url, url FROM productsschema.photos WHERE styleid = s.id
-        ) as photos
-      ) as photos,
-      (select json_agg(skus)
-          from (
-          SELECT id, size  FROM productsschema.skus WHERE styleid = s.id
+            SELECT thumbnail_url, url FROM productsschema.photos WHERE styleid = styles.id
+          ) as photos
+        ) as photos,
+        (SELECT
+          json_object_agg(
+            skus.id,
+            json_build_object(
+              'quantity', skus.quantity,
+              'size', skus.size
+            )
+          ) AS skus from productsschema.skus WHERE skus.styleid = styles.id
         ) as skus
-      ) as skus
-      FROM productsschema.styles as s
-      WHERE productid = ${product_id}
-  ) as styles;`
+        FROM productsschema.styles AS styles WHERE productid = ${product_id}
+    ) as styles)
+  )`;
 
   db.query(queryStr, (err, res) => {
     if (err) {
       callback(err);
     }
-    callback(null, res.rows[0].json_agg[0]);
+
+    callback(null, res.rows[0].json_build_object);
   })
 }
 
