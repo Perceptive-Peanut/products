@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const products = require('./routes/products');
+const path = require('path');
 
 // middlewares
 app.use(express.json());
