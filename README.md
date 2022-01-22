@@ -265,9 +265,6 @@ http {
 export SERVER_PORT=3000 PGHOST=52.53.162.110 PGUSER=ubuntu PGPASSWORD=ubuntu PGDATABASE=productsdb PGPORT=5432
 ```
 
-
-
-
 7. node
 - download node make sure your version on your local matches the version you get
 ```
@@ -341,9 +338,86 @@ pm2 startup
 pm2 save
 ```
 
+# Redis installation - ubuntu
+```
+sudo apt-get install redis
+```
+- restart the server
+```
+redis-server
+```
+- redis client
+```
+redis-cli
+```
+- to quit
+```
+quit
+```
+# using redis on the app code
+- basic setting
+```
+SET / GET / DEL / EXISTS / * / flushall
+```
+- keys that experies
+```
+ttl --> time to live
+setex --> set (ex) experiention
+```
+- add a item to the list
+```
+lpush
+```
+- print a list
+```
+lrange
+```
+- push to the end of the list
+```
+rpush
+```
+- take of the end of the array
+```
+LPOP
+```
+- romeve the last item
+```
+RPOP
+```
+- Set unique
+```
+SADD
+```
+- remove the value
+```
+SREM
+```
+- Hash store key value pairs
+```
+HSET
+HGET
+HGETALL
+HDEL
+HEXISTS
+```
 
 
+# intall redis client on node project
 
+```
+npm install redis
+```
 
+# install redis db on mac
 
+https://phoenixnap.com/kb/install-redis-on-mac
 
+```
+brew update
+brew install redis
+```
+
+- start redis on mac
+```
+brew services start redis
+```

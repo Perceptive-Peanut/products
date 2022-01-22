@@ -1,10 +1,9 @@
 const Product = require('../models/product');
 
-const handleGetAllProducts = (req, res) => {
-  // route/:param1/:param2
-  const params = req.params;
+const handleGetAllProducts = async (req, res) => {
   // route/?query
   const queryParams = req.query;
+
   Product.getAllProducts(queryParams, (err, response) => {
     if (err) {
       res.status(500).send(err);
@@ -14,6 +13,7 @@ const handleGetAllProducts = (req, res) => {
 };
 
 const handleGetProductById = (req, res) => {
+  // route/:param1/:param2
   const {product_id} = req.params;
   Product.getProductById(product_id, (err, response) => {
     if (err) {

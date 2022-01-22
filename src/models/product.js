@@ -1,28 +1,60 @@
-const db = require('../db/postgres');
+const postgresClient = require('../db/postgres');
+const redisClient = require('../db/redis');
+
+const DEFAULT_EXPIRATION = 60;
 
 const getAllProducts = (params, callback) => {
   const page = params.page || 1;
   const count = params.count || 5;
   const offset = (page - 1) * count;
-
   const queryStr = `SELECT * FROM productsschema.products OFFSET ${offset} FETCH NEXT ${count} ROWS ONLY`;
+  const cacheKey = `/products?page=${page}&count=${count}`;
 
-  db.query(queryStr, (err, res) => {
-    if (err) {
-      callback(err);
-    }
-    callback(null, res.rows);
-  })
+  redisClient.get(cacheKey)
+    .then(response => {
+      if (response != null) {
+        // Using cached data"
+        callback(null, JSON.parse(response));
+      } else {
+        // Set cache data
+        postgresClient.query(queryStr, (err, res) => {
+          if (err) callback(err);
+          const result = res.rows;
+          redisClient.set(cacheKey, JSON.stringify(result));
+          redisClient.expire(cacheKey, DEFAULT_EXPIRATION);
+          callback(null, result);
+        })
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
+      callback(error);
+    })
 }
 
 const getProductById = (product_id, callback) => {
   const queryStr = `SELECT * FROM productsschema.products WHERE id = ${product_id};`;
-  db.query(queryStr, (err, res) => {
-    if (err) {
-      callback(err);
-    }
-    callback(null, res.rows[0]);
-  })
+  const cacheKey = `/products/${product_id}`;
+
+  redisClient.get(cacheKey)
+    .then(product => {
+      if (product != null) {
+        // Using cached data"
+        callback(null, JSON.parse(product));
+      } else {
+        postgresClient.query(queryStr, (err, res) => {
+          if (err) callback(err);
+          const response = res.rows[0];
+          redisClient.set(cacheKey, JSON.stringify(response));
+          redisClient.expire(cacheKey, DEFAULT_EXPIRATION);
+          callback(null, response);
+        })
+      }
+    })
+    .catch(err => {
+      console.log('err', err);
+      callback(error);
+    })
 }
 
 const getStylesByProductId = (product_id, callback) => {
@@ -51,24 +83,54 @@ const getStylesByProductId = (product_id, callback) => {
         FROM productsschema.styles AS styles WHERE productid = ${product_id}
     ) as styles)
   )`;
+  const cacheKey = `/products/${product_id}/styles`;
 
-  db.query(queryStr, (err, res) => {
-    if (err) {
-      callback(err);
-    }
-
-    callback(null, res.rows[0].json_build_object);
-  })
+  redisClient.get(cacheKey)
+    .then(response => {
+      if (response != null) {
+        // Using cached data
+        callback(null, JSON.parse(response));
+      } else {
+        // Set cache data
+        postgresClient.query(queryStr, (err, res) => {
+          if (err) callback(err);
+          const result = res.rows[0].json_build_object;
+          redisClient.set(cacheKey, JSON.stringify(result));
+          redisClient.expire(cacheKey, DEFAULT_EXPIRATION);
+          callback(null, result);
+        })
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
+      callback(error);
+    })
 }
 
 const getRelatedByProductId = (product_id, callback) => {
   const queryStr = `SELECT json_agg(related_product_id) FROM productsschema.related WHERE current_product_id = ${product_id};`;
-  db.query(queryStr, (err, res) => {
-    if (err) {
-      callback(err);
-    }
-    callback(null, res.rows[0].json_agg);
-  })
+  const cacheKey = `/products/${product_id}/related`;
+
+  redisClient.get(cacheKey)
+    .then(response => {
+      if (response != null) {
+        // Using cached data"
+        callback(null, JSON.parse(response));
+      } else {
+        // Set cache data
+        postgresClient.query(queryStr, (err, res) => {
+          if (err) callback(err);
+          const result = res.rows[0].json_agg;
+          redisClient.set(cacheKey, JSON.stringify(result));
+          redisClient.expire(cacheKey, DEFAULT_EXPIRATION);
+          callback(null, result);
+        })
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
+      callback(error);
+    })
 }
 
 module.exports = {
